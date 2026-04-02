@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LJ Connolly — Digital Humanities Scholar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0D1B2A;
+    --teal: #4ECDC4;
+    --coral: #FF6B6B;
+    --gold: #FFD93D;
+    --lavender: #C3A6FF;
+    --body-text: #1a1a2e;
+    --card-bg: #f8f9ff;
+    --white: #ffffff;
+    --border: #e2e8f0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    background: var(--white);
+    line-height: 1.7;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    background: var(--teal);
+    color: var(--navy);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    z-index: 9999;
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a:focus { color: var(--teal); outline: none; }
+  .nav-links a:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-radius: 2px; }
+
+  /* HEADER / CANVAS */
+  #header {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    background: var(--navy);
+  }
+  #canvas-container {
+    width: 100%;
+    height: 100%;
+  }
+  #canvas-container canvas { display: block; }
+
+  .header-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    line-height: 1.1;
+  }
+  .header-text .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    color: var(--teal);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+  .header-text .institutions {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+  section { padding: 5rem 0 3rem; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--navy);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ABOUT */
+  .about-text {
+    max-width: 720px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--body-text);
+  }
+  .about-text p + p { margin-top: 1rem; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .tag {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--navy);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.3rem 0.75rem;
+    border-radius: 99px;
+    letter-spacing: 0.03em;
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--teal), rgba(78,205,196,0.1));
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.4rem;
+    top: 0.45rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--white);
+    box-shadow: 0 0 0 2px var(--teal);
+  }
+  .timeline-date {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.2rem;
+  }
+  .timeline-institution {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.2rem;
+  }
+  .timeline-desc {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #374151;
+    max-width: 680px;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(78,205,196,0.15);
+    color: #0e7c76;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* CARDS GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(13,27,42,0.1);
+    transform: translateY(-2px);
+  }
+  .card-venue {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .card-venue .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+  .card p {
+    font-size: 0.92rem;
+    color: var(--body-text);
+    line-height: 1.6;
+  }
+  .card-date {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-top: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* PUBLICATIONS */
+  .pub-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  @media (max-width: 680px) { .pub-columns { grid-template-columns: 1fr; gap: 2rem; } }
+
+  .pub-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--teal);
+    display: inline-block;
+  }
+  .pub-list { list-style: none; }
+  .pub-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+  .pub-list li:last-child { border-bottom: none; }
+  .pub-journal { color: var(--teal); font-style: italic; }
+  .pub-placeholder {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 0.92rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+  }
+
+  /* SIMPLE LIST */
+  .clean-list { list-style: none; }
+  .clean-list li {
+    display: flex;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.93rem;
+    align-items: flex-start;
+  }
+  .clean-list li:last-child { border-bottom: none; }
+  .clean-list .item-date {
+    min-width: 140px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-top: 0.15rem;
+  }
+  .clean-list .item-content { flex: 1; }
+  .clean-list .item-org {
+    font-size: 0.8rem;
+    color: var(--teal);
+    font-weight: 600;
+    margin-top: 0.15rem;
+  }
+
+  /* SERVICE */
+  .service-list { list-style: none; }
+  .service-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.93rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .service-list li:last-child { border-bottom: none; }
+  .service-list li::before {
+    content: '';
+    min-width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-top: 0.55rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+    margin-top: 4rem;
+  }
+  footer strong { color: rgba(255,255,255,0.9); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    #header { height: 400px; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.78rem; }
+    main { padding: 0 1rem; }
+    section { padding: 3rem 0 2rem; }
+    .clean-list li { flex-direction: column; gap: 0.25rem; }
+    .clean-list .item-date { min-width: unset; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-name { display: none; }
+  }
+
+  /* Focus styles */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Site navigation">
+  <span class="nav-name" aria-hidden="true">LJ Connolly</span>
+  <ul class="nav-links" role="list">
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#presentations">Presentations</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#service">Service</a></li>
+  </ul>
+</nav>
+
+<header id="header" role="banner">
+  <div id="canvas-container" aria-label="Animated network of research theme keywords" role="img"></div>
+  <div class="header-text" aria-hidden="true">
+    <h1>LJ Connolly</h1>
+    <p class="subtitle">Digital Humanities Scholar</p>
+    <p class="institutions">University of Central Florida &nbsp;·&nbsp; Text &amp; Technology</p>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ABOUT -->
+  <section id="about" aria-labelledby="about-heading">
+    <p class="section-label">Introduction</p>
+    <h2 id="about-heading">About</h2>
+    <div class="about-text">
+      <p>LJ Connolly is a PhD student in Text and Technology at the University of Central Florida, where they work as a Graduate Research Assistant at the Center for Humanities and Digital Research. Their scholarly work sits at the intersection of digital humanities, feminist theory, and critical race studies — exploring how technology mediates identity, memory, and political geography.</p>
+      <p>Previously at the University of South Florida, LJ earned an MA in Women's, Gender, and Sexuality Studies and served as a researcher on an NSF-funded project examining racial violence and collective memory in the U.S. South. Their creative writing has appeared in <em>The Ekphrastic Review</em>, <em>Bending Genres</em>, and <em>Bullets into Bells</em>.</p>
+    </div>
+    <div class="tag-row" aria-label="Research interests">
+      <span class="tag">Digital Humanities</span>
+      <span class="tag">Feminist Theory</span>
+      <span class="tag">Critical Race Studies</span>
+      <span class="tag">Gender &amp; Sexuality</span>
+      <span class="tag">Collective Memory</span>
+      <span class="tag">Political Geography</span>
+      <span class="tag">Queer Theory</span>
+      <span class="tag">Creative Writing</span>
+      <span class="tag">Pedagogy</span>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research" aria-labelledby="research-heading">
+    <p class="section-label">Scholarship</p>
+    <h2 id="research-heading">Research</h2>
+    <div class="timeline" role="list">
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">August 2025 — Present <span class="badge">Current</span></p>
+        <h3>Graduate Research Assistant</h3>
+        <p class="timeline-institution">Center for Humanities and Digital Research, University of Central Florida</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">August 2023 — Present <span class="badge">Current</span></p>
+        <h3>Graduate Student Researcher</h3>
+        <p class="timeline-institution">University of South Florida &nbsp;·&nbsp; NSF Award No. 2127228</p>
+        <p class="timeline-desc"><strong>Primary project:</strong> "Embodiment, Collective Memory, and Political Geographies: Ethical Praxis and Collective Reckoning with Racial Violence in the U.S. South"</p>
+        <p class="timeline-desc" style="margin-top:0.4rem;"><strong>Sub-project (Chair):</strong> "The Atmospheres of White Memory: Unveiling the Invisible Geographies of Racial Violence in Polk County"</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRESENTATIONS -->
+  <section id="presentations" aria-labelledby="pres-heading">
+    <p class="section-label">Scholarly Activity</p>
+    <h2 id="pres-heading">Conference Presentations</h2>
+    <div class="card-grid">
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>American Anthropological Association</p>
+        <h3>"Embodiment, Collective Memory, and Political Geographies: Ethical Praxis and Collective Reckoning with Racial Violence in the U.S. South"</h3>
+        <p class="card-date">November 2024</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>Mid-Atlantic Popular Culture Association</p>
+        <h3>"Gender Expansive Embodiment in the Borderlands"</h3>
+        <p class="card-date">Summer Symposium · August 2024</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>Hacettepe University, Turkey</p>
+        <h3>"Creative Fiction and Political Discourse in the Virtual Storytelling Space, Twine"</h3>
+        <p class="card-date">Digital Games as Cultural and Literary Narratives · May 2024</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>USF 13th Annual WGSS Research Colloquium</p>
+        <h3>"Breaking Binaries: Nonbinary Lesbians and Navigating Narrative Identity Formation on Dating Apps"</h3>
+        <p class="card-date">April 2024</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>USF Transnational Feminisms Mini-Conference</p>
+        <h3>"'Weaving' and 'Mosaics' of Gender Binaries and Colonized Borders: A Case Study of Gloria Anzaldúa's <em>Borderlands/La Frontera</em>"</h3>
+        <p class="card-date">April 2024</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>UW-Madison Women's &amp; Gender Studies Consortium</p>
+        <h3>"Anarcha Feminist Pedagogy in Virtual Learning Environments"</h3>
+        <p class="card-date">April 2024</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications" aria-labelledby="pub-heading">
+    <p class="section-label">Writing</p>
+    <h2 id="pub-heading">Publications</h2>
+    <div class="pub-columns">
+
+      <div>
+        <p class="pub-section-title">Academic</p>
+        <p class="pub-placeholder">Academic publications in progress.</p>
+      </div>
+
+      <div>
+        <p class="pub-section-title">Creative Writing</p>
+        <ul class="pub-list">
+          <li>
+            "The residue of womanhood."<br>
+            <span class="pub-journal">Bending Genres</span> · April 2022
+          </li>
+          <li>
+            "The witches dance."<br>
+            <span class="pub-journal">The Ekphrastic Review</span> · November 2021
+          </li>
+          <li>
+            "ROAR."<br>
+            <span class="pub-journal">Bullets into Bells</span> · July 2019
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TEACHING -->
+  <section id="teaching" aria-labelledby="teach-heading">
+    <p class="section-label">Instruction</p>
+    <h2 id="teach-heading">Teaching</h2>
+    <div class="card-grid">
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>University of Central Florida <span class="badge">Current</span></p>
+        <h3>Graduate Teaching Assistant</h3>
+        <p>Digital Imaging Fundamentals, Nicholson School of Communication and Media</p>
+        <p class="card-date">August 2025 — Present</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>University of South Florida</p>
+        <h3>Graduate Teaching Assistant</h3>
+        <p>Intro to Women's Studies, Department of Women's, Gender, and Sexuality Studies</p>
+        <p class="card-date">August 2023 — May 2025</p>
+      </article>
+
+      <article class="card">
+        <p class="card-venue"><span class="dot" aria-hidden="true"></span>University of Tampa</p>
+        <h3>Professor's Assistant</h3>
+        <p>First-Year Seminar, Center for Teaching and Learning</p>
+        <p class="card-date">August 2019 — May 2021</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" aria-labelledby="edu-heading">
+    <p class="section-label">Academic Background</p>
+    <h2 id="edu-heading">Education</h2>
+    <div class="timeline" role="list">
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">In Progress <span class="badge">Current</span></p>
+        <h3>PhD — Text and Technology</h3>
+        <p class="timeline-institution">University of Central Florida (expected 2029)</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">2025</p>
+        <h3>MA — Women's, Gender, and Sexuality Studies</h3>
+        <p class="timeline-institution">University of South Florida</p>
+        <p class="timeline-desc">Thesis: "Breaking Binaries: Gender Non-Conforming Lesbians and the Undercurrent of Biopower on Dating Apps" · Committee Chair: Dr. David Rubin</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">2021</p>
+        <h3>BA — Writing</h3>
+        <p class="timeline-institution">University of Tampa</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">Fall 2019</p>
+        <h3>Study Abroad</h3>
+        <p class="timeline-institution">University of Oxford</p>
+        <p class="timeline-desc">Concentrations in Women's Studies and Major Novels</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" aria-labelledby="exp-heading">
+    <p class="section-label">Industry</p>
+    <h2 id="exp-heading">Relevant Experience</h2>
+    <ul class="clean-list">
+      <li>
+        <span class="item-date">Dec 2024 – May 2025</span>
+        <div class="item-content">
+          <strong>Assessment Scorer</strong>
+          <p class="item-org">Pearson Education</p>
+        </div>
+      </li>
+      <li>
+        <span class="item-date">Jun 2021 – Dec 2024</span>
+        <div class="item-content">
+          <strong>Copy Editor, Proofreader &amp; Tutor</strong>
+          <p class="item-org">Pear Deck Tutor (formerly TutorMe)</p>
+        </div>
+      </li>
+      <li>
+        <span class="item-date">May – Aug 2020</span>
+        <div class="item-content">
+          <strong>Digital Media &amp; Content Writing Intern</strong>
+          <p class="item-org">That's So Tampa</p>
+        </div>
+      </li>
+      <li>
+        <span class="item-date">Sep 2018 – Sep 2019</span>
+        <div class="item-content">
+          <strong>Marketing &amp; Copy Editing Intern</strong>
+          <p class="item-org">Connolly and Callaghan Ltd.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- SERVICE -->
+  <section id="service" aria-labelledby="service-heading">
+    <p class="section-label">Community</p>
+    <h2 id="service-heading">Service</h2>
+    <ul class="service-list">
+      <li>Application Reviewer, Conference on Democratic Violence in Latin America — March 2025</li>
+      <li>Application Reviewer &amp; Proposal Committee Member, National Women's Studies Association — November 2024</li>
+      <li>Moderator, "Literature and Psychology" Panel, USF 5th Annual Undergraduate Humanities Conference — January 2024</li>
+      <li>Co-Moderator, "Safeguarding Voices: A Symposium on Academic Freedom and Diversity," University of South Florida — February 2024</li>
+      <li>Moderator, "Thinking Asexuality: Interrogations Across Disciplines and Perspectives," Thinking Sex Conference — March 2024</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p><strong>LJ Connolly</strong> &nbsp;·&nbsp; PhD Student, Text &amp; Technology &nbsp;·&nbsp; University of Central Florida</p>
+  <p style="margin-top:0.5rem;">&copy; 2026</p>
+</footer>
+
+<script>
+// P5.js animation — instance mode
+new p5(function(p) {
+  const KEYWORDS = [
+    'Gender','Memory','Race','Borderlands','Digital',
+    'Embodiment','Feminism','Pedagogy','Violence','Identity',
+    'Technology','Narrative','Queer','Twine','Text',
+    'Power','Bodies','Space','Writing','Politics',
+    'Anzaldúa','Biopower','Collective','Geography','Praxis'
+  ];
+
+  const COLORS = ['#4ECDC4','#FF6B6B','#FFD93D','#C3A6FF','#80CBC4'];
+  const CONNECT_DIST = 160;
+  const HOVER_DIST = 32;
+
+  let nodes = [];
+  let hoveredIdx = -1;
+  let container;
+
+  class Node {
+    constructor(x, y, label, col) {
+      this.x = x;
+      this.y = y;
+      this.label = label;
+      this.col = col;
+      this.vx = p.random(-0.35, 0.35);
+      this.vy = p.random(-0.35, 0.35);
+      this.r = Math.max(28, label.length * 4.2);
+      this.noiseX = p.random(1000);
+      this.noiseY = p.random(1000);
+      this.highlighted = false;
+    }
+    update(w, h) {
+      this.noiseX += 0.004;
+      this.noiseY += 0.004;
+      this.vx += (p.noise(this.noiseX) - 0.5) * 0.06;
+      this.vy += (p.noise(this.noiseY) - 0.5) * 0.06;
+      const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+      if (speed > 0.6) { this.vx *= 0.6/speed; this.vy *= 0.6/speed; }
+      this.x += this.vx;
+      this.y += this.vy;
+      const pad = this.r + 8;
+      if (this.x < pad) { this.x = pad; this.vx *= -1; }
+      if (this.x > w - pad) { this.x = w - pad; this.vx *= -1; }
+      if (this.y < pad) { this.y = pad; this.vy *= -1; }
+      if (this.y > h - pad) { this.y = h - pad; this.vy *= -1; }
+    }
+    draw(isHovered) {
+      const alpha = isHovered ? 255 : (this.highlighted ? 220 : 160);
+      const scale = isHovered ? 1.18 : (this.highlighted ? 1.06 : 1);
+      p.push();
+      p.translate(this.x, this.y);
+      p.scale(scale);
+      // glow
+      if (isHovered) {
+        const glowCol = p.color(this.col);
+        glowCol.setAlpha(40);
+        p.noStroke();
+        p.fill(glowCol);
+        p.ellipse(0, 0, (this.r + 14) * 2);
+      }
+      // circle
+      const fillCol = p.color(this.col);
+      fillCol.setAlpha(alpha);
+      p.fill(fillCol);
+      p.stroke(255, 255, 255, isHovered ? 220 : 80);
+      p.strokeWeight(isHovered ? 1.5 : 0.8);
+      p.ellipse(0, 0, this.r * 2);
+      // label
+      p.noStroke();
+      p.fill(255, 255, 255, isHovered ? 255 : 210);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textSize(isHovered ? 11.5 : 10.5);
+      p.textStyle(p.BOLD);
+      p.text(this.label, 0, 0);
+      p.pop();
+    }
+  }
+
+  p.setup = function() {
+    container = document.getElementById('canvas-container');
+    const cvs = p.createCanvas(container.offsetWidth, container.offsetHeight);
+    cvs.parent('canvas-container');
+    p.textFont('Inter, sans-serif');
+
+    for (let i = 0; i < KEYWORDS.length; i++) {
+      const x = p.random(80, p.width - 80);
+      const y = p.random(60, p.height - 60);
+      const col = COLORS[i % COLORS.length];
+      nodes.push(new Node(x, y, KEYWORDS[i], col));
+    }
+  };
+
+  p.draw = function() {
+    p.background(13, 27, 42);
+
+    // detect hover
+    hoveredIdx = -1;
+    for (let i = 0; i < nodes.length; i++) {
+      const d = p.dist(p.mouseX, p.mouseY, nodes[i].x, nodes[i].y);
+      if (d < nodes[i].r + HOVER_DIST * 0.2) { hoveredIdx = i; break; }
+    }
+
+    // mark highlighted (connected to hovered)
+    const connectedTo = new Set();
+    if (hoveredIdx >= 0) {
+      for (let j = 0; j < nodes.length; j++) {
+        if (j === hoveredIdx) continue;
+        const d = p.dist(nodes[hoveredIdx].x, nodes[hoveredIdx].y, nodes[j].x, nodes[j].y);
+        if (d < CONNECT_DIST) connectedTo.add(j);
+      }
+    }
+    nodes.forEach((n, i) => n.highlighted = connectedTo.has(i));
+
+    // draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const d = p.dist(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+        if (d < CONNECT_DIST) {
+          const isActive = (i === hoveredIdx || j === hoveredIdx || connectedTo.has(i) && connectedTo.has(j));
+          const alpha = isActive
+            ? p.map(d, 0, CONNECT_DIST, 180, 60)
+            : p.map(d, 0, CONNECT_DIST, 55, 10);
+          p.stroke(255, 255, 255, alpha);
+          p.strokeWeight(isActive ? 1.2 : 0.5);
+          p.line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+        }
+      }
+    }
+
+    // update & draw nodes
+    nodes.forEach((n, i) => {
+      n.update(p.width, p.height);
+      n.draw(i === hoveredIdx);
+    });
+  };
+
+  p.windowResized = function() {
+    if (container) {
+      p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+    }
+  };
+});
+</script>
+
+</body>
+</html>
