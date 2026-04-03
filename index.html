@@ -13,14 +13,15 @@
 
   :root {
     --navy: #0D1B2A;
-    --teal: #0a7c75;
-    --coral: #FF6B6B;
-    --gold: #FFD93D;
-    --lavender: #C3A6FF;
+    --teal: #3a6344;
+    --coral: #c0392b;
+    --gold: #c8860a;
+    --lavender: #7b5ea7;
     --body-text: #1a1a2e;
-    --card-bg: #f8f9ff;
+    --card-bg: #f2e4d0;
     --white: #ffffff;
-    --border: #e2e8f0;
+    --border: #d8c4a0;
+    --header-bg: #f0e6d3;
   }
 
   html { scroll-behavior: smooth; font-size: 20px; }
@@ -90,7 +91,7 @@
     width: 100%;
     height: 600px;
     overflow: hidden;
-    background: var(--navy);
+    background: var(--header-bg);
   }
   #canvas-container {
     width: 100%;
@@ -110,24 +111,23 @@
   .header-text h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2.5rem, 6vw, 4.5rem);
-    color: var(--white);
+    color: var(--navy);
     font-weight: 700;
     letter-spacing: 0.06em;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+    text-shadow: 0 1px 4px rgba(240,230,211,0.8);
     line-height: 1.1;
   }
   .header-text .subtitle {
     font-size: clamp(1rem, 2vw, 1.3rem);
     color: var(--teal);
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-top: 0.6rem;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
   }
   .header-text .institutions {
     font-size: 1rem;
-    color: rgba(255,255,255,0.6);
+    color: rgba(13,27,42,0.55);
     margin-top: 0.4rem;
     letter-spacing: 0.05em;
   }
@@ -197,7 +197,7 @@
     top: 0.4rem;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(to bottom, var(--teal), rgba(78,205,196,0.1));
+    background: linear-gradient(to bottom, var(--teal), rgba(58,99,68,0.1));
     border-radius: 2px;
   }
   .timeline-item {
@@ -237,8 +237,8 @@
   }
   .badge {
     display: inline-block;
-    background: rgba(78,205,196,0.15);
-    color: #0e7c76;
+    background: rgba(58,99,68,0.15);
+    color: #2d5235;
     font-size: 0.85rem;
     font-weight: 600;
     padding: 0.2rem 0.6rem;
@@ -446,15 +446,48 @@
       <p>Previously at the University of South Florida, LJ earned an MA in Women's, Gender, and Sexuality Studies and served as a researcher on an NSF-funded project examining racial violence and collective memory in the U.S. South. Their creative writing has appeared in <em>The Ekphrastic Review</em>, <em>Bending Genres</em>, and <em>Bullets into Bells</em>.</p>
     </div>
     <div class="tag-row" aria-label="Research interests">
-      <span class="tag">Digital Humanities</span>
-      <span class="tag">Feminist Theory</span>
-      <span class="tag">Critical Race Studies</span>
-      <span class="tag">Gender &amp; Sexuality</span>
-      <span class="tag">Collective Memory</span>
-      <span class="tag">Political Geography</span>
-      <span class="tag">Queer Theory</span>
-      <span class="tag">Creative Writing</span>
-      <span class="tag">Pedagogy</span>
+      <span class="tag">Technical Communication</span>
+      <span class="tag">Critical Data Studies</span>
+      <span class="tag">Feminist Technoscience</span>
+      <span class="tag">Queer Surveillance Studies</span>
+      <span class="tag">UX Research</span>
+      <span class="tag">Human-Centered Design</span>
+      <span class="tag">Critical Digital Pedagogy</span>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" aria-labelledby="edu-heading">
+    <p class="section-label">Academic Background</p>
+    <h2 id="edu-heading">Education</h2>
+    <div class="timeline" role="list">
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">In Progress <span class="badge">Current</span></p>
+        <h3>PhD — Text and Technology</h3>
+        <p class="timeline-institution">University of Central Florida (expected 2029)</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">2025</p>
+        <h3>MA — Women's, Gender, and Sexuality Studies</h3>
+        <p class="timeline-institution">University of South Florida</p>
+        <p class="timeline-desc">Thesis: "Breaking Binaries: Gender Non-Conforming Lesbians and the Undercurrent of Biopower on Dating Apps" · Committee Chair: Dr. David Rubin</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">2021</p>
+        <h3>BA — Writing</h3>
+        <p class="timeline-institution">University of Tampa</p>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <p class="timeline-date">Fall 2019</p>
+        <h3>Study Abroad</h3>
+        <p class="timeline-institution">University of Oxford</p>
+        <p class="timeline-desc">Concentrations in Women's Studies and Major Novels</p>
+      </div>
+
     </div>
   </section>
 
@@ -588,41 +621,6 @@
     </div>
   </section>
 
-  <!-- EDUCATION -->
-  <section id="education" aria-labelledby="edu-heading">
-    <p class="section-label">Academic Background</p>
-    <h2 id="edu-heading">Education</h2>
-    <div class="timeline" role="list">
-
-      <div class="timeline-item" role="listitem">
-        <p class="timeline-date">In Progress <span class="badge">Current</span></p>
-        <h3>PhD — Text and Technology</h3>
-        <p class="timeline-institution">University of Central Florida (expected 2029)</p>
-      </div>
-
-      <div class="timeline-item" role="listitem">
-        <p class="timeline-date">2025</p>
-        <h3>MA — Women's, Gender, and Sexuality Studies</h3>
-        <p class="timeline-institution">University of South Florida</p>
-        <p class="timeline-desc">Thesis: "Breaking Binaries: Gender Non-Conforming Lesbians and the Undercurrent of Biopower on Dating Apps" · Committee Chair: Dr. David Rubin</p>
-      </div>
-
-      <div class="timeline-item" role="listitem">
-        <p class="timeline-date">2021</p>
-        <h3>BA — Writing</h3>
-        <p class="timeline-institution">University of Tampa</p>
-      </div>
-
-      <div class="timeline-item" role="listitem">
-        <p class="timeline-date">Fall 2019</p>
-        <h3>Study Abroad</h3>
-        <p class="timeline-institution">University of Oxford</p>
-        <p class="timeline-desc">Concentrations in Women's Studies and Major Novels</p>
-      </div>
-
-    </div>
-  </section>
-
   <!-- EXPERIENCE -->
   <section id="experience" aria-labelledby="exp-heading">
     <p class="section-label">Industry</p>
@@ -690,7 +688,7 @@ new p5(function(p) {
     'Anzaldúa','Biopower','Collective','Geography','Praxis'
   ];
 
-  const COLORS = ['#4ECDC4','#FF6B6B','#FFD93D','#C3A6FF','#80CBC4'];
+  const COLORS = ['#3a6344','#c0392b','#c8860a','#7b5ea7','#1a6b9a'];
   const CONNECT_DIST = 160;
   const HOVER_DIST = 32;
 
@@ -744,12 +742,12 @@ new p5(function(p) {
       const fillCol = p.color(this.col);
       fillCol.setAlpha(alpha);
       p.fill(fillCol);
-      p.stroke(255, 255, 255, isHovered ? 220 : 80);
+      p.stroke(30, 20, 10, isHovered ? 180 : 60);
       p.strokeWeight(isHovered ? 1.5 : 0.8);
       p.ellipse(0, 0, this.r * 2);
       // label
       p.noStroke();
-      p.fill(255, 255, 255, isHovered ? 255 : 210);
+      p.fill(255, 255, 255, isHovered ? 255 : 230);
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(isHovered ? 11.5 : 10.5);
       p.textStyle(p.BOLD);
@@ -773,7 +771,7 @@ new p5(function(p) {
   };
 
   p.draw = function() {
-    p.background(13, 27, 42);
+    p.background(240, 230, 211);
 
     // detect hover
     hoveredIdx = -1;
@@ -800,9 +798,9 @@ new p5(function(p) {
         if (d < CONNECT_DIST) {
           const isActive = (i === hoveredIdx || j === hoveredIdx || connectedTo.has(i) && connectedTo.has(j));
           const alpha = isActive
-            ? p.map(d, 0, CONNECT_DIST, 180, 60)
-            : p.map(d, 0, CONNECT_DIST, 55, 10);
-          p.stroke(255, 255, 255, alpha);
+            ? p.map(d, 0, CONNECT_DIST, 160, 50)
+            : p.map(d, 0, CONNECT_DIST, 45, 8);
+          p.stroke(30, 20, 10, alpha);
           p.strokeWeight(isActive ? 1.2 : 0.5);
           p.line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
         }
