@@ -26,10 +26,21 @@
 
   body {
     font-family: 'Inter', sans-serif;
-    color: var(--body-text);
-    background: var(--white);
+    color: #e8eeff;
+    background: #040a14 url('AdobeStock_418654052.jpeg') center center / cover fixed;
     line-height: 1.8;
   }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 6, 20, 0.62);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  nav, main, footer { position: relative; z-index: 1; }
 
   /* Skip link */
   .skip-link {
@@ -102,7 +113,7 @@
   h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--navy);
+    color: #ffffff;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 2rem;
@@ -112,7 +123,7 @@
     max-width: 720px;
     font-size: 1.1rem;
     line-height: 1.8;
-    color: var(--body-text);
+    color: #e8eeff;
   }
   .about-text p + p { margin-top: 1.2rem; }
 
@@ -126,7 +137,7 @@
   .attribution {
     max-width: 720px;
     font-size: 0.85rem;
-    color: #64748b;
+    color: rgba(200,215,255,0.7);
     margin-top: 1rem;
     line-height: 1.7;
   }
