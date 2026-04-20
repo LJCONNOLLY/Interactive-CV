@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On This Land — LJ Connolly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0D1B2A;
+    --teal: #3a6344;
+    --body-text: #1a1a2e;
+    --card-bg: #f2e4d0;
+    --white: #ffffff;
+    --border: #d8c4a0;
+    --header-bg: #f0e6d3;
+  }
+
+  html { scroll-behavior: smooth; font-size: 20px; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--body-text);
+    background: var(--white);
+    line-height: 1.8;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    background: var(--teal);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    z-index: 9999;
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a:focus { color: var(--teal); outline: none; }
+  .nav-links a:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-radius: 2px; }
+
+  /* MAIN */
+  main { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+  section { padding: 5rem 0 3rem; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--navy);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+
+  .about-text {
+    max-width: 720px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--body-text);
+  }
+  .about-text p + p { margin-top: 1.2rem; }
+
+  /* Map */
+  .map-wrap {
+    margin-top: 2.5rem;
+    max-width: 860px;
+  }
+
+  /* Attribution */
+  .attribution {
+    max-width: 720px;
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 1rem;
+    line-height: 1.7;
+  }
+  .attribution a {
+    color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .attribution a:hover { color: #254d14; }
+
+  /* Divider */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4rem 0 0;
+  }
+
+  /* Placeholder */
+  .reflection-placeholder {
+    max-width: 720px;
+    font-size: 1.05rem;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 1rem;
+    margin-top: 4rem;
+  }
+  footer strong { color: rgba(255,255,255,0.9); }
+
+  /* Grass footer */
+  .grass-footer {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: 0;
+  }
+  .land-ack-link-self {
+    display: none; /* hide self-link on this page */
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 0.75rem; }
+    .nav-links a { font-size: 0.9rem; }
+    main { padding: 0 1rem; }
+    section { padding: 3rem 0 2rem; }
+  }
+  @media (max-width: 480px) {
+    .nav-name { display: none; }
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Site navigation">
+  <a href="index.html" class="nav-name">LJ Connolly</a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#research">Research</a></li>
+    <li><a href="index.html#presentations">Presentations</a></li>
+    <li><a href="index.html#publications">Publications</a></li>
+    <li><a href="index.html#teaching">Teaching</a></li>
+    <li><a href="index.html#service">Service</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+  <section aria-labelledby="page-heading">
+    <p class="section-label">Land Acknowledgment</p>
+    <h1 id="page-heading">On This Land</h1>
+
+    <div class="about-text">
+      <p>I live and work in Lakeland, Florida, on the ancestral and traditional lands of the Seminole, and before them the Calusa, Tocobaga, and other Indigenous peoples whose histories on this land predate and exceed the colonial record. The Seminole Tribe of Florida and the Miccosukee Tribe of Indians of Florida are sovereign nations whose members continue to live, work, and govern in Florida today.</p>
+      <p>I acknowledge that the research I do from this place is shaped by the land I live on, and that this land is also a site of ongoing colonial violence and racial violence whose official record is incomplete. This acknowledgment is a beginning, not an end.</p>
+    </div>
+
+    <div class="map-wrap">
+      <iframe
+        src="https://native-land.ca/maps/territories/?maps=territories&coordinates=28.0395,-81.9498"
+        width="100%"
+        height="480"
+        style="border: 0; display: block; border-radius: 6px;"
+        loading="lazy"
+        title="Native Land Digital map centered on Lakeland, Florida">
+      </iframe>
+    </div>
+
+    <p class="attribution">
+      Map from <a href="https://native-land.ca" target="_blank" rel="noopener">Native Land Digital</a>, an Indigenous-led nonprofit. Territorial boundaries are approximate and contested.<br>
+      To support Indigenous communities in Florida:
+      <a href="https://www.semtribe.com" target="_blank" rel="noopener">Seminole Tribe of Florida</a> and
+      <a href="https://www.miccosukee.com" target="_blank" rel="noopener">Miccosukee Tribe of Indians of Florida</a>.
+    </p>
+  </section>
+
+  <hr class="section-divider" aria-hidden="true">
+
+  <section aria-labelledby="reflection-heading">
+    <p class="section-label">Reflection</p>
+    <h2 id="reflection-heading" style="font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);color:var(--navy);font-weight:600;margin-bottom:1.5rem;">On Doing Research From This Place</h2>
+    <div class="reflection-placeholder">
+      [Reflection piece — to be added.]
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p><strong>LJ Connolly</strong> &nbsp;·&nbsp; PhD Student, Text &amp; Technology &nbsp;·&nbsp; University of Central Florida</p>
+  <p style="margin-top:0.5rem;">&copy; 2026</p>
+</footer>
+
+</body>
+</html>
