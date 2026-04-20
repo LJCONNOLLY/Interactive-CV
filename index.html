@@ -496,6 +496,20 @@
     outline: 2px solid var(--teal);
     outline-offset: -3px;
   }
+  .earth-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6);
+    white-space: nowrap;
+  }
 
   /* Focus styles */
   a:focus-visible, button:focus-visible {
@@ -1003,7 +1017,9 @@ new p5(function(p) {
 
 
 <div class="earth-footer">
-  <a href="land-acknowledgment.html" class="earth-link" aria-label="Land acknowledgment"></a>
+  <a href="land-acknowledgment.html" class="earth-link" aria-label="Land acknowledgment">
+    <span class="earth-label">Land Acknowledgment</span>
+  </a>
 </div>
 
 </body>
