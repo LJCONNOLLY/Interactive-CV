@@ -404,13 +404,17 @@
 
   /* Earth footer */
   .earth-footer {
-    background: #060c18;
-    height: 180px;
+    height: 240px;
     overflow: hidden;
     position: relative;
     line-height: 0;
     margin-top: 0;
+    background-image: url('AdobeStock_501002861.jpeg');
+    background-size: cover;
+    background-position: center 43%;
+    transition: filter 0.4s;
   }
+  .earth-footer:hover { filter: brightness(1.08); }
   .earth-link {
     position: absolute;
     inset: 0;
@@ -423,80 +427,6 @@
     outline: 2px solid var(--teal);
     outline-offset: -3px;
   }
-  .earth-globe {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120vw;
-    height: 120vw;
-    top: 8px;
-    border-radius: 50%;
-    transition: filter 0.4s;
-    background:
-      /* === CITY LIGHTS (warm amber/gold) === */
-      /* Western Europe dense cluster */
-      radial-gradient(ellipse 14% 7% at 40% 7.5%, rgba(255,195,55,0.78) 0%, rgba(255,155,15,0.38) 38%, transparent 68%),
-      /* Italy / Mediterranean */
-      radial-gradient(ellipse 9% 5% at 58% 8.8%, rgba(255,185,45,0.72) 0%, rgba(255,145,10,0.32) 38%, transparent 66%),
-      /* UK / Northern France */
-      radial-gradient(ellipse 10% 4.5% at 30% 6.5%, rgba(255,200,65,0.68) 0%, rgba(255,160,25,0.28) 38%, transparent 64%),
-      /* Eastern Europe cluster */
-      radial-gradient(ellipse 15% 5% at 70% 7.2%, rgba(255,178,48,0.58) 0%, rgba(255,138,15,0.22) 38%, transparent 64%),
-      /* Iberian Peninsula */
-      radial-gradient(ellipse 6% 3.5% at 25% 8.5%, rgba(255,195,58,0.58) 0%, transparent 58%),
-      /* Central scattered lights */
-      radial-gradient(ellipse 5% 3% at 50% 7.8%, rgba(255,202,68,0.52) 0%, transparent 54%),
-      /* Far right (Ukraine/Russia) */
-      radial-gradient(ellipse 7% 3.5% at 82% 7.2%, rgba(255,182,52,0.48) 0%, transparent 56%),
-      /* Scattered smaller clusters */
-      radial-gradient(ellipse 4% 2.5% at 35% 9.2%, rgba(255,198,62,0.52) 0%, transparent 50%),
-      radial-gradient(ellipse 5% 2.5% at 63% 9.8%, rgba(255,178,48,0.48) 0%, transparent 52%),
-      radial-gradient(ellipse 4% 2% at 18% 7.8%, rgba(255,195,58,0.46) 0%, transparent 48%),
-      /* Tiny pinpoint city glows */
-      radial-gradient(circle 1% at 45% 6.9%, rgba(255,202,75,0.65) 0%, transparent 100%),
-      radial-gradient(circle 0.9% at 55% 7.4%, rgba(255,195,68,0.58) 0%, transparent 100%),
-      radial-gradient(circle 0.8% at 42% 8.2%, rgba(255,205,72,0.55) 0%, transparent 100%),
-      radial-gradient(circle 0.8% at 60% 8.8%, rgba(255,188,58,0.52) 0%, transparent 100%),
-      radial-gradient(circle 0.7% at 32% 7.6%, rgba(255,200,68,0.5) 0%, transparent 100%),
-      radial-gradient(circle 0.7% at 74% 6.6%, rgba(255,182,52,0.48) 0%, transparent 100%),
-      radial-gradient(circle 0.6% at 22% 9.5%, rgba(255,195,60,0.45) 0%, transparent 100%),
-      radial-gradient(circle 0.6% at 86% 8%, rgba(255,185,55,0.42) 0%, transparent 100%),
-      /* === SNOW / ICE (Alps — bright white patch) === */
-      radial-gradient(ellipse 11% 5% at 52% 8.8%, rgba(225,240,255,0.92) 0%, rgba(200,225,252,0.58) 38%, transparent 70%),
-      radial-gradient(ellipse 6% 2.8% at 49% 8.2%, rgba(255,255,255,0.88) 0%, rgba(238,248,255,0.48) 35%, transparent 62%),
-      /* === CLOUD COVER (blue-white upper band) === */
-      radial-gradient(ellipse 52% 6% at 33% 4.8%, rgba(140,188,238,0.62) 0%, rgba(118,172,228,0.32) 44%, transparent 78%),
-      radial-gradient(ellipse 36% 5% at 72% 4.6%, rgba(132,182,235,0.56) 0%, rgba(110,165,222,0.26) 40%, transparent 74%),
-      radial-gradient(ellipse 28% 4.5% at 50% 5.5%, rgba(148,195,242,0.52) 0%, transparent 68%),
-      radial-gradient(ellipse 20% 3.5% at 17% 6.8%, rgba(138,188,238,0.52) 0%, transparent 64%),
-      radial-gradient(ellipse 22% 4% at 83% 6.2%, rgba(132,182,232,0.46) 0%, transparent 64%),
-      /* === ATMOSPHERE GLOW (dominant bright blue arc) === */
-      /* Core bright edge */
-      radial-gradient(ellipse 88% 3% at 50% 0.4%, rgba(130,215,255,0.98) 0%, rgba(100,195,255,0.72) 32%, rgba(70,168,250,0.3) 58%, transparent 78%),
-      /* Inner halo */
-      radial-gradient(ellipse 94% 6.5% at 50% 0.7%, rgba(80,175,255,0.68) 0%, rgba(55,150,248,0.38) 38%, rgba(35,120,232,0.16) 62%, transparent 84%),
-      /* Outer diffuse halo */
-      radial-gradient(ellipse 100% 13% at 50% -0.5%, rgba(42,122,222,0.42) 0%, rgba(28,95,205,0.22) 44%, rgba(16,68,182,0.08) 68%, transparent 88%),
-      /* === DARK NIGHT SURFACE BASE === */
-      radial-gradient(ellipse 100% 100% at 50% 50%, #1c2b45 0%, #0e1a30 18%, #07101e 42%, #040a14 68%, #020710 100%);
-    box-shadow:
-      inset -90px 0 180px rgba(0,2,15,0.85),
-      inset 50px 50px 140px rgba(0,0,8,0.65);
-  }
-  .earth-atmos {
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    pointer-events: none;
-    box-shadow:
-      0 0 0 3px rgba(130,215,255,0.95),
-      0 0 0 9px rgba(90,188,255,0.62),
-      0 0 0 22px rgba(60,158,245,0.28),
-      0 0 0 44px rgba(35,118,215,0.13),
-      0 0 0 75px rgba(18,78,182,0.06),
-      0 0 0 115px rgba(8,48,152,0.03);
-  }
-  .earth-link:hover .earth-globe { filter: brightness(1.08); }
 
   /* Focus styles */
   a:focus-visible, button:focus-visible {
@@ -1005,11 +935,7 @@ new p5(function(p) {
 
 
 <div class="earth-footer">
-  <a href="land-acknowledgment.html" class="earth-link" aria-label="Land acknowledgment">
-    <div class="earth-globe">
-      <div class="earth-atmos"></div>
-    </div>
-  </a>
+  <a href="land-acknowledgment.html" class="earth-link" aria-label="Land acknowledgment"></a>
 </div>
 
 </body>
