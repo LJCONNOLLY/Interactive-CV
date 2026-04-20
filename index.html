@@ -91,7 +91,7 @@
     width: 100%;
     height: 600px;
     overflow: hidden;
-    background: var(--header-bg);
+    background: #040614;
   }
   #canvas-container {
     width: 100%;
@@ -111,15 +111,15 @@
   .header-text h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2.5rem, 6vw, 4.5rem);
-    color: var(--navy);
+    color: #ffffff;
     font-weight: 700;
     letter-spacing: 0.06em;
-    text-shadow: 0 1px 4px rgba(240,230,211,0.8);
+    text-shadow: 0 0 40px rgba(160,190,255,0.35);
     line-height: 1.1;
   }
   .header-text .subtitle {
     font-size: clamp(1rem, 2vw, 1.3rem);
-    color: var(--teal);
+    color: #a8c4f0;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -127,7 +127,7 @@
   }
   .header-text .institutions {
     font-size: 1rem;
-    color: rgba(13,27,42,0.55);
+    color: rgba(200,215,255,0.6);
     margin-top: 0.4rem;
     letter-spacing: 0.05em;
   }
@@ -445,7 +445,7 @@
 </nav>
 
 <header id="header" role="banner">
-  <div id="canvas-container" aria-label="Animated network of research theme keywords" role="img"></div>
+  <div id="canvas-container" aria-label="Animated night sky with drifting research theme stars" role="img"></div>
   <div class="header-text" aria-hidden="true">
     <h1>LJ Connolly</h1>
     <p class="subtitle">Digital Humanities Scholar</p>
@@ -697,7 +697,7 @@
 </footer>
 
 <script>
-// P5.js animation — instance mode
+// P5.js night sky animation — instance mode
 new p5(function(p) {
   const KEYWORDS = [
     'Gender','Memory','Race','Borderlands','Digital',
@@ -707,70 +707,128 @@ new p5(function(p) {
     'Anzaldúa','Biopower','Collective','Geography','Praxis'
   ];
 
-  const COLORS = ['#3a6344','#c0392b','#c8860a','#7b5ea7','#1a6b9a'];
-  const CONNECT_DIST = 160;
-  const HOVER_DIST = 32;
+  const STAR_COLORS = [
+    '#ffe8a8',  // pale gold
+    '#a8c8ff',  // pale blue
+    '#d4b0ff',  // pale purple
+    '#a0e8cc',  // pale mint
+    '#ffb8c8',  // pale rose
+  ];
+  const CONNECT_DIST = 180;
 
-  let nodes = [];
+  let bgStars = [];
+  let conceptNodes = [];
   let hoveredIdx = -1;
   let container;
 
-  class Node {
+  class BgStar {
+    constructor() {
+      this.x = p.random(p.width);
+      this.y = p.random(p.height);
+      this.r = p.random() > 0.85 ? p.random(1.5, 2.5) : p.random(0.3, 1.4);
+      this.baseBrightness = p.random(120, 255);
+      this.twinkleSpeed = p.random(0.003, 0.012);
+      this.twinkleOffset = p.random(1000);
+    }
+    draw() {
+      this.twinkleOffset += this.twinkleSpeed;
+      const alpha = p.constrain(this.baseBrightness + p.sin(this.twinkleOffset) * 30, 40, 255);
+      p.noStroke();
+      if (this.r > 1.5) {
+        p.fill(180, 200, 255, alpha * 0.18);
+        p.ellipse(this.x, this.y, this.r * 5);
+      }
+      p.fill(240, 245, 255, alpha);
+      p.ellipse(this.x, this.y, this.r * 2);
+    }
+  }
+
+  class ConceptNode {
     constructor(x, y, label, col) {
       this.x = x;
       this.y = y;
       this.label = label;
       this.col = col;
-      this.vx = p.random(-0.35, 0.35);
-      this.vy = p.random(-0.35, 0.35);
-      this.r = Math.max(28, label.length * 4.2);
+      this.vx = p.random(-0.25, 0.25);
+      this.vy = p.random(-0.25, 0.25);
       this.noiseX = p.random(1000);
       this.noiseY = p.random(1000);
-      this.highlighted = false;
+      this.twinkle = p.random(1000);
+      this.hitR = Math.max(24, label.length * 3.5);
     }
     update(w, h) {
-      this.noiseX += 0.004;
-      this.noiseY += 0.004;
-      this.vx += (p.noise(this.noiseX) - 0.5) * 0.06;
-      this.vy += (p.noise(this.noiseY) - 0.5) * 0.06;
-      const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
-      if (speed > 0.6) { this.vx *= 0.6/speed; this.vy *= 0.6/speed; }
+      this.noiseX += 0.003;
+      this.noiseY += 0.003;
+      this.twinkle += 0.02;
+      this.vx += (p.noise(this.noiseX) - 0.5) * 0.04;
+      this.vy += (p.noise(this.noiseY) - 0.5) * 0.04;
+      const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+      if (speed > 0.4) { this.vx *= 0.4 / speed; this.vy *= 0.4 / speed; }
       this.x += this.vx;
       this.y += this.vy;
-      const pad = this.r + 8;
+      const pad = 40;
       if (this.x < pad) { this.x = pad; this.vx *= -1; }
       if (this.x > w - pad) { this.x = w - pad; this.vx *= -1; }
       if (this.y < pad) { this.y = pad; this.vy *= -1; }
       if (this.y > h - pad) { this.y = h - pad; this.vy *= -1; }
     }
-    draw(isHovered) {
-      const alpha = isHovered ? 255 : (this.highlighted ? 220 : 160);
-      const scale = isHovered ? 1.18 : (this.highlighted ? 1.06 : 1);
+    draw(isHovered, isConnected) {
+      const brightness = 0.7 + 0.3 * p.sin(this.twinkle);
+      const rayLen = isHovered ? 14 : (isConnected ? 10 : 7);
+      const outerAlpha = isHovered ? 54 : (isConnected ? 36 : 18);
+      const innerAlpha = isHovered ? 108 : (isConnected ? 72 : 36);
+      const starAlpha = isHovered ? 255 : (isConnected ? 230 : Math.floor(brightness * 180 + 55));
+      const labelAlpha = isHovered ? 255 : (isConnected ? 200 : Math.floor(brightness * 130 + 80));
+
       p.push();
       p.translate(this.x, this.y);
-      p.scale(scale);
-      // glow
-      if (isHovered) {
-        const glowCol = p.color(this.col);
-        glowCol.setAlpha(40);
-        p.noStroke();
-        p.fill(glowCol);
-        p.ellipse(0, 0, (this.r + 14) * 2);
-      }
-      // circle
-      const fillCol = p.color(this.col);
-      fillCol.setAlpha(alpha);
-      p.fill(fillCol);
-      p.stroke(30, 20, 10, isHovered ? 180 : 60);
-      p.strokeWeight(isHovered ? 1.5 : 0.8);
-      p.ellipse(0, 0, this.r * 2);
-      // label
+
+      const c = p.color(this.col);
+
+      // outer glow
+      const gc = p.color(this.col);
+      gc.setAlpha(outerAlpha);
       p.noStroke();
-      p.fill(255, 255, 255, isHovered ? 255 : 230);
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textSize(isHovered ? 11.5 : 10.5);
-      p.textStyle(p.BOLD);
-      p.text(this.label, 0, 0);
+      p.fill(gc);
+      p.ellipse(0, 0, (rayLen + 12) * 2);
+
+      // inner glow
+      gc.setAlpha(innerAlpha);
+      p.fill(gc);
+      p.ellipse(0, 0, (rayLen + 4) * 2);
+
+      // 4-point sparkle (+)
+      const rc = p.color(this.col);
+      rc.setAlpha(starAlpha);
+      p.stroke(rc);
+      p.strokeWeight(isHovered ? 1.5 : 1.0);
+      p.line(-rayLen, 0, rayLen, 0);
+      p.line(0, -rayLen, 0, rayLen);
+
+      // diagonal rays (×), shorter
+      const d = rayLen * 0.55;
+      p.strokeWeight(isHovered ? 1.0 : 0.7);
+      p.line(-d, -d, d, d);
+      p.line(d, -d, -d, d);
+
+      // bright center dot
+      p.noStroke();
+      p.fill(255, 255, 255, starAlpha);
+      p.ellipse(0, 0, 3.5);
+
+      // label — glow pass then main pass
+      p.textAlign(p.LEFT, p.CENTER);
+      p.textSize(isHovered ? 11 : 9.5);
+      p.textStyle(p.NORMAL);
+
+      const lc = p.color(this.col);
+      lc.setAlpha(Math.floor(labelAlpha * 0.5));
+      p.fill(lc);
+      p.text(this.label, rayLen + 6, 0);
+
+      p.fill(240, 245, 255, labelAlpha);
+      p.text(this.label, rayLen + 5, 0);
+
       p.pop();
     }
   }
@@ -781,55 +839,81 @@ new p5(function(p) {
     cvs.parent('canvas-container');
     p.textFont('Inter, sans-serif');
 
+    const numBgStars = Math.floor((p.width * p.height) / 800);
+    for (let i = 0; i < numBgStars; i++) {
+      bgStars.push(new BgStar());
+    }
+
     for (let i = 0; i < KEYWORDS.length; i++) {
       const x = p.random(80, p.width - 80);
       const y = p.random(60, p.height - 60);
-      const col = COLORS[i % COLORS.length];
-      nodes.push(new Node(x, y, KEYWORDS[i], col));
+      conceptNodes.push(new ConceptNode(x, y, KEYWORDS[i], STAR_COLORS[i % STAR_COLORS.length]));
     }
   };
 
   p.draw = function() {
-    p.background(240, 230, 211);
+    // Deep space base
+    p.background(4, 6, 20);
 
-    // detect hover
-    hoveredIdx = -1;
-    for (let i = 0; i < nodes.length; i++) {
-      const d = p.dist(p.mouseX, p.mouseY, nodes[i].x, nodes[i].y);
-      if (d < nodes[i].r + HOVER_DIST * 0.2) { hoveredIdx = i; break; }
+    const cx = p.width * 0.5;
+    const cy = p.height * 0.45;
+
+    p.noStroke();
+
+    // Milky Way: purple-blue outer cloud
+    for (let i = 6; i >= 0; i--) {
+      p.fill(40 + i * 5, 30 + i * 3, 80 + i * 8, (7 - i) * 3);
+      p.ellipse(cx, cy, p.width * 0.5 + i * 40, p.height * 1.2 + i * 20);
     }
 
-    // mark highlighted (connected to hovered)
+    // Horizon warm glow
+    for (let i = 4; i >= 0; i--) {
+      p.fill(80 + i * 10, 50 + i * 5, 20, (5 - i) * 4);
+      p.ellipse(cx, p.height * 0.85, p.width * 0.6, p.height * 0.5 + i * 30);
+    }
+
+    // Bright blue-white core band
+    for (let i = 5; i >= 0; i--) {
+      p.fill(120 + i * 8, 140 + i * 6, 200 + i * 5, (6 - i) * 2.5);
+      p.ellipse(cx, cy, p.width * 0.25 + i * 30, p.height + i * 20);
+    }
+
+    // Background stars
+    bgStars.forEach(s => s.draw());
+
+    // Hover detection
+    hoveredIdx = -1;
+    for (let i = 0; i < conceptNodes.length; i++) {
+      if (p.dist(p.mouseX, p.mouseY, conceptNodes[i].x, conceptNodes[i].y) < conceptNodes[i].hitR) {
+        hoveredIdx = i;
+        break;
+      }
+    }
+
+    // Connected nodes
     const connectedTo = new Set();
     if (hoveredIdx >= 0) {
-      for (let j = 0; j < nodes.length; j++) {
+      for (let j = 0; j < conceptNodes.length; j++) {
         if (j === hoveredIdx) continue;
-        const d = p.dist(nodes[hoveredIdx].x, nodes[hoveredIdx].y, nodes[j].x, nodes[j].y);
+        const d = p.dist(conceptNodes[hoveredIdx].x, conceptNodes[hoveredIdx].y, conceptNodes[j].x, conceptNodes[j].y);
         if (d < CONNECT_DIST) connectedTo.add(j);
       }
     }
-    nodes.forEach((n, i) => n.highlighted = connectedTo.has(i));
 
-    // draw connections
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const d = p.dist(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
-        if (d < CONNECT_DIST) {
-          const isActive = (i === hoveredIdx || j === hoveredIdx || connectedTo.has(i) && connectedTo.has(j));
-          const alpha = isActive
-            ? p.map(d, 0, CONNECT_DIST, 160, 50)
-            : p.map(d, 0, CONNECT_DIST, 45, 8);
-          p.stroke(30, 20, 10, alpha);
-          p.strokeWeight(isActive ? 1.2 : 0.5);
-          p.line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
-        }
+    // Constellation lines (hovered only)
+    if (hoveredIdx >= 0) {
+      for (const j of connectedTo) {
+        const d = p.dist(conceptNodes[hoveredIdx].x, conceptNodes[hoveredIdx].y, conceptNodes[j].x, conceptNodes[j].y);
+        p.stroke(180, 200, 255, p.map(d, 0, CONNECT_DIST, 80, 15));
+        p.strokeWeight(0.6);
+        p.line(conceptNodes[hoveredIdx].x, conceptNodes[hoveredIdx].y, conceptNodes[j].x, conceptNodes[j].y);
       }
     }
 
-    // update & draw nodes
-    nodes.forEach((n, i) => {
+    // Update + draw concept stars
+    conceptNodes.forEach((n, i) => {
       n.update(p.width, p.height);
-      n.draw(i === hoveredIdx);
+      n.draw(i === hoveredIdx, connectedTo.has(i));
     });
   };
 
