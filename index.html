@@ -402,23 +402,85 @@
     .nav-name { display: none; }
   }
 
-  /* Grass footer */
-  .grass-footer {
-    position: relative;
-    width: 100%;
+  /* Earth footer */
+  .earth-footer {
+    background: #0D1B2A;
+    height: 180px;
     overflow: hidden;
+    position: relative;
     line-height: 0;
     margin-top: 0;
   }
-  .land-ack-link {
+  .earth-link {
+    position: absolute;
+    inset: 0;
     display: block;
-    width: 100%;
     cursor: pointer;
-    line-height: 0;
     text-decoration: none;
+    z-index: 2;
   }
-  .land-ack-link svg { transition: opacity 0.2s; }
-  .land-ack-link:hover svg { opacity: 0.88; }
+  .earth-link:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: -3px;
+  }
+  .earth-globe {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120vw;
+    height: 120vw;
+    top: 8px;
+    border-radius: 50%;
+    transition: filter 0.4s;
+    background:
+      /* Atmosphere limb glow */
+      radial-gradient(ellipse 90% 5% at 50% 0.5%, rgba(80,210,255,0.6) 0%, rgba(50,170,240,0.2) 50%, transparent 80%),
+      /* Ice / snow cap */
+      radial-gradient(ellipse 80% 8% at 50% 1.5%, rgba(215,238,255,0.9) 0%, rgba(180,218,248,0.5) 40%, transparent 72%),
+      /* Clouds */
+      radial-gradient(ellipse 36% 4% at 30% 7%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.2) 55%, transparent 82%),
+      radial-gradient(ellipse 26% 3% at 64% 10%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 50%, transparent 78%),
+      radial-gradient(ellipse 20% 3% at 49% 8.5%, rgba(240,248,255,0.48) 0%, transparent 72%),
+      radial-gradient(ellipse 16% 2.5% at 80% 7%, rgba(255,255,255,0.5) 0%, transparent 68%),
+      radial-gradient(ellipse 14% 2.5% at 19% 9%, rgba(255,255,255,0.42) 0%, transparent 65%),
+      /* Europe / Asia landmass */
+      radial-gradient(ellipse 45% 20% at 72% 7%, #5a9040 0%, #4a8030 30%, #3a6a22 60%, transparent 85%),
+      radial-gradient(ellipse 28% 14% at 79% 6%, #3a7028 0%, transparent 72%),
+      radial-gradient(ellipse 22% 10% at 64% 5.5%, #4a8830 0%, transparent 68%),
+      /* Mountain ranges */
+      radial-gradient(ellipse 16% 8% at 70% 7%, #7a5828 0%, transparent 65%),
+      radial-gradient(ellipse 13% 6% at 82% 5%, #6a4e20 0%, transparent 60%),
+      /* Tundra / taiga */
+      radial-gradient(ellipse 22% 5% at 76% 4%, #5a8040 0%, transparent 62%),
+      /* North Africa / desert */
+      radial-gradient(ellipse 36% 8% at 65% 9.5%, #c09030 0%, #a07828 45%, transparent 80%),
+      radial-gradient(ellipse 26% 7% at 58% 10%, #d4a840 0%, #b08830 50%, transparent 76%),
+      /* Americas */
+      radial-gradient(ellipse 20% 18% at 22% 8%, #4a8838 0%, #5a9840 25%, #3a7028 55%, transparent 84%),
+      radial-gradient(ellipse 13% 10% at 20% 6%, #8a6030 0%, transparent 65%),
+      /* Atlantic ocean */
+      radial-gradient(ellipse 18% 10% at 42% 8%, rgba(8,55,135,0.55) 0%, transparent 70%),
+      /* Pacific / open ocean highlight */
+      radial-gradient(ellipse 26% 12% at 40% 5.5%, rgba(26,110,210,0.5) 0%, transparent 72%),
+      /* Deep ocean base */
+      radial-gradient(ellipse 100% 100% at 50% 40%, #1a78c8 0%, #0d4888 35%, #082050 60%, #040e28 100%);
+    box-shadow:
+      inset -60px 0 120px rgba(0,8,50,0.55),
+      inset 80px 30px 100px rgba(255,252,220,0.06);
+  }
+  .earth-atmos {
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow:
+      0 0 0 2px rgba(90,215,255,0.9),
+      0 0 0 6px rgba(65,185,245,0.5),
+      0 0 0 14px rgba(45,155,225,0.22),
+      0 0 0 30px rgba(25,110,195,0.1),
+      0 0 0 55px rgba(15,70,160,0.05);
+  }
+  .earth-link:hover .earth-globe { filter: brightness(1.07); }
 
   /* Focus styles */
   a:focus-visible, button:focus-visible {
@@ -926,73 +988,11 @@ new p5(function(p) {
 </script>
 
 
-<div class="grass-footer">
-  <a href="land-acknowledgment.html" class="land-ack-link" aria-label="Land acknowledgment">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true" style="display:block;width:100%;height:180px;">
-      <defs>
-        <linearGradient id="oceanGrad" x1="720" y1="30" x2="720" y2="180" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#3aabe0"/>
-          <stop offset="30%" stop-color="#1870b8"/>
-          <stop offset="100%" stop-color="#0a3864"/>
-        </linearGradient>
-        <clipPath id="earthEdge">
-          <ellipse cx="720" cy="296" rx="800" ry="266"/>
-        </clipPath>
-      </defs>
-
-      <!-- Space background matching site nav/footer -->
-      <rect width="1440" height="180" fill="#0D1B2A"/>
-
-      <!-- Earth ocean base -->
-      <ellipse cx="720" cy="296" rx="800" ry="266" fill="url(#oceanGrad)"/>
-
-      <!-- Surface details, clipped to Earth ellipse -->
-      <g clip-path="url(#earthEdge)">
-
-        <!-- Main central landmass (Europe/Asia) -->
-        <path d="M 520,180 C 522,165 528,148 538,130 C 548,112 562,95 587,80 C 607,68 632,60 667,55 C 697,51 732,50 767,52 C 802,54 837,60 872,68 C 907,76 942,86 977,93 C 1007,99 1037,103 1072,104 C 1102,105 1132,103 1167,102 C 1197,101 1232,103 1267,107 C 1297,111 1327,118 1362,124 C 1387,129 1417,138 1440,148 L 1440,180 Z" fill="#4a8838"/>
-
-        <!-- Forest (darker green patches) -->
-        <path d="M 600,100 C 630,90 670,82 710,80 C 740,78 760,80 780,86 C 760,88 740,88 720,86 C 700,84 670,86 640,92 Z" fill="#3a7028" opacity="0.85"/>
-        <path d="M 870,80 C 910,74 960,74 1000,80 C 980,82 950,84 920,82 C 900,80 885,80 870,80 Z" fill="#3a7028" opacity="0.75"/>
-        <path d="M 1050,100 C 1090,96 1140,96 1180,100 C 1160,104 1120,106 1080,104 Z" fill="#3a7028" opacity="0.65"/>
-        <path d="M 1220,112 C 1265,108 1310,108 1350,114 C 1325,118 1285,120 1248,118 Z" fill="#3a7028" opacity="0.6"/>
-
-        <!-- Brown/rocky/mountain areas -->
-        <path d="M 750,68 C 790,62 840,60 880,66 C 910,70 930,80 940,88 C 920,84 900,80 875,76 C 850,72 820,68 790,68 Z" fill="#8a6030" opacity="0.65"/>
-        <path d="M 1130,105 C 1165,100 1210,100 1240,106 C 1220,110 1185,112 1155,110 Z" fill="#907040" opacity="0.55"/>
-        <path d="M 560,120 C 580,112 610,108 640,110 C 630,116 610,118 585,118 Z" fill="#7a5828" opacity="0.55"/>
-        <path d="M 650,90 C 668,84 692,82 712,84 C 698,88 678,90 658,90 Z" fill="#9a6838" opacity="0.5"/>
-
-        <!-- Left continental edge (Americas) -->
-        <path d="M 0,180 L 0,148 C 20,130 50,115 85,105 C 115,96 148,93 178,95 C 205,97 228,105 248,116 C 265,125 275,140 280,158 L 283,180 Z" fill="#4a8838"/>
-        <path d="M 90,110 C 120,104 155,103 180,108 C 165,112 140,114 115,112 Z" fill="#3a7028" opacity="0.7"/>
-        <path d="M 145,100 C 165,95 190,94 210,98 C 198,102 175,104 155,102 Z" fill="#8a6030" opacity="0.5"/>
-
-        <!-- Northern ice and snow at horizon -->
-        <path d="M 590,64 C 630,54 690,50 750,52 C 810,54 870,62 920,70 C 875,66 830,58 790,55 C 760,53 730,52 700,54 C 670,56 630,60 590,64 Z" fill="#d8ecf8" opacity="0.8"/>
-        <path d="M 548,76 C 568,69 598,66 638,67 C 618,71 592,74 562,73 Z" fill="#c8e0f0" opacity="0.65"/>
-        <path d="M 910,68 C 945,62 990,60 1030,64 C 1005,68 968,70 936,68 Z" fill="#d0e8f8" opacity="0.6"/>
-
-        <!-- Ocean sheen / shallow water near coasts -->
-        <path d="M 420,88 C 460,80 520,77 575,80 C 535,84 482,86 448,85 Z" fill="#60c0e8" opacity="0.35"/>
-        <path d="M 300,115 C 325,108 355,106 380,110 C 362,114 335,116 310,114 Z" fill="#50b0e0" opacity="0.3"/>
-
-        <!-- Clouds -->
-        <path d="M 330,82 C 370,72 430,68 490,72 C 550,76 590,82 570,86 C 540,90 490,88 445,84 C 405,80 355,86 330,82 Z" fill="#ffffff" opacity="0.55"/>
-        <path d="M 780,56 C 820,48 890,46 950,50 C 910,54 855,56 815,55 Z" fill="#ffffff" opacity="0.5"/>
-        <path d="M 1085,88 C 1125,82 1185,80 1230,84 C 1200,88 1155,90 1115,88 Z" fill="#ffffff" opacity="0.42"/>
-        <path d="M 460,60 C 492,54 545,52 592,55 C 560,59 515,61 476,59 Z" fill="#e8f4ff" opacity="0.38"/>
-        <path d="M 180,100 C 205,94 240,92 270,96 C 250,100 218,102 190,100 Z" fill="#ffffff" opacity="0.4"/>
-
-      </g>
-
-      <!-- Atmosphere glow at the horizon -->
-      <ellipse cx="720" cy="296" rx="810" ry="276" fill="none" stroke="#40c0f0" stroke-width="10" stroke-opacity="0.15"/>
-      <ellipse cx="720" cy="296" rx="804" ry="270" fill="none" stroke="#50d4ff" stroke-width="5" stroke-opacity="0.4"/>
-      <ellipse cx="720" cy="296" rx="801" ry="267" fill="none" stroke="#90e8ff" stroke-width="1.5" stroke-opacity="0.85"/>
-
-    </svg>
+<div class="earth-footer">
+  <a href="land-acknowledgment.html" class="earth-link" aria-label="Land acknowledgment">
+    <div class="earth-globe">
+      <div class="earth-atmos"></div>
+    </div>
   </a>
 </div>
 
