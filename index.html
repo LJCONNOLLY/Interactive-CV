@@ -91,7 +91,7 @@
     width: 100%;
     height: 600px;
     overflow: hidden;
-    background: #040614;
+    background: #040614 url('AdobeStock_569720237.jpeg') center center / cover no-repeat;
   }
   #canvas-container {
     width: 100%;
@@ -860,8 +860,7 @@ new p5(function(p) {
   };
 
   p.draw = function() {
-    // Deep space base
-    p.background(4, 6, 20);
+    p.clear();
 
     const cx = p.width * 0.5;
     const cy = p.height * 0.45;
